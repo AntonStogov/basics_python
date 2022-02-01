@@ -1,0 +1,13 @@
+from requests import get, utils
+from decimal import Decimal  # Встроенный модуль decimal для работы с числами
+
+response = utils.get_unicode_from_response(get(('http://www.cbr.ru/scripts/XML_daily.asp')))
+
+def currency_rates(code):
+    content = response.split("<Valute ID=")  # получаем список
+    for i in content:
+        if code.upper() in i:
+            print(code.upper(), end=" ")
+            return Decimal(i.replace("/", "").split("<Value>")[1].replace(",", "."))
+
+print(currency_rates(input("Введите валюту: ")))
